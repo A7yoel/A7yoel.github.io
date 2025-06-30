@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuestra Historia de Amor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rosado: #fbcfe8;
+      --morado: #d8b4fe;
+      --rosado-fuerte: #f472b6;
+      --blanco: #ffffff;
+      --texto: #6b21a8;
+      --sombra: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--rosado), var(--morado));
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--texto);
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      color: var(--rosado-fuerte);
+      text-shadow: 2px 2px 6px #fff;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 3px #9333ea;
+    }
+
+    .photo {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
+      border: 4px solid #fff;
+      background-image: url('img/3.jpg');
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 30px;
+      transition: transform 0.6s ease;
+    }
+
+    .photo:hover {
+      transform: scale(1.05) rotate(1deg);
+    }
+
+    .countdown {
+      background: var(--blanco);
+      padding: 20px 30px;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px var(--sombra);
+      margin-bottom: 20px;
+      font-size: 18px;
+      max-width: 350px;
+      width: 90%;
+    }
+
+    .countdown span {
+      display: inline-block;
+      margin: 6px 10px;
+      color: var(--morado);
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .countdown label {
+      font-size: 13px;
+      color: #666;
+      display: inline-block;
+      margin: 0 6px;
+    }
+
+    .love-note {
+      font-size: 20px;
+      color: #ec4899;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #fff;
+      margin-top: 10px;
+    }
+
+    a {
+      margin-top: 25px;
+      color: #fff;
+      background: var(--morado);
+      padding: 12px 26px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(216, 180, 254, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      background: #b26efc;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .photo {
+        width: 200px;
+        height: 200px;
+      }
+
+      .countdown span {
+        font-size: 18px;
+      }
+
+      .love-note {
+        font-size: 17px;
+      }
+
+      a {
+        font-size: 0.95rem;
+        padding: 10px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Tu Historia </h1>
+  <p class="subtitle">¿Cuánto tiempo llevamos? 💗</p>
+
+  <div class="photo" style="background-image: url('img/ya.jpg');"></div>
+
+  <div class="countdown" id="countdown">
+    <div>
+      <span id="years">0</span><label>Años</label>
+      <span id="months">0</span><label>Meses</label>
+      <span id="days">0</span><label>Días</label>
+    </div>
+    <div>
+      <span id="hours">0</span><label>Horas</label>
+      <span id="minutes">0</span><label>Minutos</label>
+      <span id="seconds">0</span><label>Segundos</label>
+    </div>
+  </div>
+
+  <div class="love-note">💗 woow a seguir triunfando 💗</div>
+  <a href="menu.html">⬅ Volver al Menú</a>
+
+  <script>
+    function updateCountdown() {
+      const startDate = new Date(2002, 5, 12); // Mes 5 = junio (se empieza a contar desde 0)
+      const now = new Date();
+
+      let years = now.getFullYear() - startDate.getFullYear();
+      let months = now.getMonth() - startDate.getMonth();
+      let days = now.getDate() - startDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+
+      document.getElementById('years').textContent = years;
+      document.getElementById('months').textContent = months;
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      document.getElementById('minutes').textContent = minutes;
+      document.getElementById('seconds').textContent = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>

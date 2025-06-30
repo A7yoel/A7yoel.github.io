@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Juego de Memoria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fbcfe8, #e9d5ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #fff;
+      font-size: 3rem;
+      text-shadow: 2px 2px 5px #a855f7;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #fff;
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 3px #333;
+    }
+
+    .tablero-juego {
+      display: grid;
+      grid-template-columns: repeat(3, 90px);
+      gap: 15px;
+      padding: 20px;
+      background: #ffffffee;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(51, 51, 51, 0.2);
+    }
+
+    .carta {
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+      background-color: #fce7f3;
+      border: 2px solid #d946ef;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    .carta img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .carta.volteada img {
+      display: block;
+    }
+
+    .carta::before {
+      content: '?';
+      font-size: 2rem;
+      color: #a855f7;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .carta.volteada::before {
+      content: '';
+    }
+
+    .carta.combinada {
+      visibility: hidden;
+    }
+
+    a {
+      margin-top: 30px;
+      color: #fff;
+      text-decoration: none;
+      background: #a855f7;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+      transition: background 0.3s;
+    }
+
+    a:hover {
+      background: #9333ea;
+    }
+
+    @media (max-width: 450px) {
+      .tablero-juego {
+        grid-template-columns: repeat(3, 70px);
+      }
+      .carta {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Juego de Memoria</h1>
+  <p class="subtitle">¡Encuentra todas las parejas de imágenes! 💖</p>
+  <div class="tablero-juego" id="tablero"></div>
+  <a href="menu.html">⬅ Volver al menú</a>
+
+  <script>
+    const imagenes = [
+      'img/1a.jpg', 'img/2a.jpg', 'img/3a.jpg',
+      'img/4a.jpg', 'img/7a.jpg', 'img/6a.jpg'
+    ];
+
+    // Duplicamos y mezclamos las cartas
+    const cartas = [...imagenes, ...imagenes].sort(() => Math.random() - 0.5);
+
+    let cartasVolteadas = [];
+    let parejasEncontradas = 0;
+    const tablero = document.getElementById('tablero');
+
+    cartas.forEach((src, index) => {
+      const carta = document.createElement('div');
+      carta.classList.add('carta');
+      carta.dataset.index = index;
+
+      const img = document.createElement('img');
+      img.src = src;
+      carta.appendChild(img);
+
+      carta.addEventListener('click', () => voltearCarta(carta));
+      tablero.appendChild(carta);
+    });
+
+    function voltearCarta(carta) {
+      if (
+        cartasVolteadas.length < 2 &&
+        !carta.classList.contains('volteada') &&
+        !carta.classList.contains('combinada')
+      ) {
+        carta.classList.add('volteada');
+        cartasVolteadas.push(carta);
+
+        if (cartasVolteadas.length === 2) {
+          setTimeout(verificarPareja, 700);
+        }
+      }
+    }
+
+    function verificarPareja() {
+      const [c1, c2] = cartasVolteadas;
+      const img1 = c1.querySelector('img').src;
+      const img2 = c2.querySelector('img').src;
+
+      if (img1 === img2) {
+        c1.classList.add('combinada');
+        c2.classList.add('combinada');
+        parejasEncontradas++;
+
+        if (parejasEncontradas === imagenes.length) {
+          setTimeout(() => {
+            alert('¡Felicidades! ¡Encontraste todas las parejas! 🎉');
+          }, 300);
+        }
+      } else {
+        c1.classList.remove('volteada');
+        c2.classList.remove('volteada');
+      }
+
+      cartasVolteadas = [];
+    }
+  </script>
+</body>
+</html>

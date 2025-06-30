@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Contraseña Especial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --morado: #d8b4fe;
+      --rosa: #fbcfe8;
+      --rosado-hover: #f9a8d4;
+      --blanco: #ffffff;
+      --negro-suave: #333333;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--rosa), var(--morado));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      padding: 15px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      background: var(--blanco);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+      animation: fadeIn 1.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .bow {
+      font-size: 2rem;
+      animation: bounce 2s infinite;
+      color: var(--rosado-hover);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    h1 {
+      color: var(--morado);
+      font-family: 'Pacifico', cursive;
+      font-size: 1.5rem;
+      margin: 8px 0;
+    }
+
+    p {
+      color: var(--negro-suave);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .password-box {
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      width: 70%;
+      margin: 0 auto 15px;
+      border: 2px solid #ccc;
+      letter-spacing: 4px;
+      transition: border-color 0.4s ease, box-shadow 0.3s ease;
+    }
+
+    .password-box.success {
+      border-color: #22c55e;
+      box-shadow: 0 0 6px #22c55e;
+    }
+
+    .password-box.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 6px #ef4444;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .key {
+      background-color: var(--rosa);
+      color: var(--negro-suave);
+      font-size: 1rem;
+      padding: 14px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      user-select: none;
+    }
+
+    .key:hover {
+      background-color: var(--rosado-hover);
+      transform: scale(1.05);
+    }
+
+    .photo {
+      background-color: #e4e4e4;
+      width: 120px;
+      height: 130px;
+      margin: 0 auto;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--negro-suave);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.4);
+    }
+
+    .love-note {
+      font-size: 0.8rem;
+      color: var(--morado);
+      margin-top: 10px;
+    }
+
+    .hearts {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hearts span {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.2;
+      animation: floatHearts 20s linear infinite;
+    }
+
+    @keyframes floatHearts {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      50% { opacity: 0.4; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .hearts span:nth-child(1) { left: 10%; animation-duration: 20s; }
+    .hearts span:nth-child(2) { left: 30%; animation-duration: 24s; }
+    .hearts span:nth-child(3) { left: 50%; animation-duration: 22s; }
+    .hearts span:nth-child(4) { left: 70%; animation-duration: 26s; }
+    .hearts span:nth-child(5) { left: 90%; animation-duration: 23s; }
+  </style>
+</head>
+<body>
+
+  <!-- Corazones flotando -->
+  <div class="hearts">
+    <span>💖</span>
+    <span>💘</span>
+    <span>💞</span>
+    <span>💕</span>
+    <span>💗</span>
+  </div>
+
+  <div class="container">
+    <div class="bow">🎀</div>
+    <h1>Mi Contraseña</h1>
+    <p>Una fecha mágica para ti ✨</p>
+    <div class="password-box" id="passwordDisplay"></div>
+
+    <div class="keypad">
+      <div class="key" onclick="addToPassword('1')">1</div>
+      <div class="key" onclick="addToPassword('2')">2</div>
+      <div class="key" onclick="addToPassword('3')">3</div>
+      <div class="key" onclick="addToPassword('4')">4</div>
+      <div class="key" onclick="addToPassword('5')">5</div>
+      <div class="key" onclick="addToPassword('6')">6</div>
+      <div class="key" onclick="addToPassword('7')">7</div>
+      <div class="key" onclick="addToPassword('8')">8</div>
+      <div class="key" onclick="addToPassword('9')">9</div>
+      <div class="key" onclick="addToPassword('*')">*</div>
+      <div class="key" onclick="addToPassword('0')">0</div>
+      <div class="key" onclick="deleteLast()">⌫</div>
+    </div>
+
+    <div class="photo">yaquelin<br>00/00/00</div>
+    <div class="love-note">Te amo 💕</div>
+  </div>
+
+  <script>
+    let password = '';
+
+    function addToPassword(value) {
+      if (password.length < 6) {
+        password += value;
+        updateDisplay();
+      }
+      if (password.length === 6) {
+        checkPassword();
+      }
+    }
+
+    function deleteLast() {
+      password = password.slice(0, -1);
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const display = document.getElementById('passwordDisplay');
+      display.textContent = password;
+      display.classList.remove('success', 'error');
+    }
+
+    function checkPassword() {
+      const display = document.getElementById('passwordDisplay');
+      if (password === '120602') {
+        display.classList.add('success');
+        setTimeout(() => {
+          window.location.href = 'menu.html';
+        }, 1000);
+      } else {
+        display.classList.add('error');
+        setTimeout(() => {
+          password = '';
+          updateDisplay();
+        }, 1000);
+      }
+    }
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>

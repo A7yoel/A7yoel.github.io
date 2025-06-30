@@ -1,0 +1,265 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sobre con Carta y Video</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #fbcfe8, #e9d5ff);
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .envelope {
+      width: 400px;
+      height: 260px;
+      position: relative;
+      background: #fff0f5;
+      border: 2px solid #c084fc;
+      border-radius: 12px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      perspective: 1000px;
+      z-index: 1;
+    }
+
+    .envelope-folds {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .fold-left, .fold-right {
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      width: 50px;
+      background: rgba(192, 132, 252, 0.2);
+      border: 1px solid #c084fc;
+    }
+
+    .fold-left {
+      left: 0;
+      clip-path: polygon(0 0, 100% 18px, 100% calc(100% - 18px), 0 100%);
+    }
+
+    .fold-right {
+      right: 0;
+      clip-path: polygon(0 18px, 100% 0, 100% 100%, 0 calc(100% - 18px));
+    }
+
+    .fold-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 50px;
+      right: 50px;
+      height: 42px;
+      background: rgba(192, 132, 252, 0.3);
+      border-top: 1px solid #c084fc;
+      clip-path: polygon(0 0, 18px 100%, calc(100% - 18px) 100%, 100% 0);
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 130px;
+      background: #fbe4f8;
+      border-bottom: 2px solid #c084fc;
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top;
+      transition: transform 0.5s ease;
+      z-index: 3;
+    }
+
+    .envelope-flap.open {
+      transform: rotateX(180deg);
+    }
+
+    .wax-seal {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      background: radial-gradient(circle, #ff69b4, #c2185b);
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      z-index: 4;
+    }
+
+    .wax-seal.open {
+      transform: scale(0.6) translateX(-50%);
+      opacity: 0;
+    }
+
+    .letter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 640px;
+      max-width: 95%;
+      height: 520px;
+      background: #fff;
+      border: 2px solid #c084fc;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 30px;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .letter.open {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .letter-text {
+      font-size: 18px;
+      text-align: center;
+      color: #6b21a8;
+      line-height: 1.6;
+    }
+
+    .video-wrapper {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .menu-button {
+      margin-top: 36px;
+      background-color: #c084fc;
+      color: #fff;
+      padding: 14px 32px;
+      font-weight: bold;
+      border-radius: 34px;
+      text-decoration: none;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+    .menu-button:hover {
+      background-color: #a855f7;
+    }
+
+    @media (max-width: 600px) {
+      .envelope {
+        width: 300px;
+        height: 200px;
+      }
+
+      .letter {
+        width: 95%;
+        height: 440px;
+        padding: 20px;
+      }
+
+      .letter-text {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope" onclick="toggleEnvelope()" onkeydown="handleKeypress(event)" tabindex="0" aria-label="Abrir o cerrar el sobre">
+    <div class="envelope-folds">
+      <div class="fold-left"></div>
+      <div class="fold-right"></div>
+      <div class="fold-bottom"></div>
+    </div>
+    <div class="envelope-flap">
+      <div class="wax-seal" aria-hidden="true">💌</div>
+    </div>
+
+    <div class="letter">
+  <div class="letter-text">
+    Yaquelin:<br><br>
+    No sé por qué,<br>
+    pero contigo todo se siente un poco más en calma.<br>
+    Como si el mundo hablara más bajito cuando estás cerca.<br><br>
+
+    Hay cosas que no digo, no porque no quiera,<br>
+    sino porque a veces no sé cómo.<br>
+    Tengo el corazón lleno de palabras que se asustan justo antes de salir.<br><br>
+
+    A veces me dan ganas de contarte todo,<br>
+    como si confiar en ti fuera fácil,<br>
+    como si tú fueras un lugar seguro.<br><br>
+
+    No sé si te has dado cuenta, pero me haces bien.<br>
+    Y aunque no diga mucho,<br>
+    cada gesto tuyo me deja pensando más de lo que debería.<br><br>
+
+    Tal vez algún día me anime a decirte todo lo que no sé decir.<br>
+    Por ahora, solo quería que supieras que me importas, aunque no lo notes.<br><br>
+
+    "Te dejo esta canción… porque a veces la música dice lo que a mí me cuesta tanto." 💖
+  </div>
+
+    <a href="https://www.youtube.com/watch?v=ia2Ph61bYzc" target="_blank" class="music-link">🎵 ROSÉ - Messy</a>
+</div>
+
+  </div>
+
+  <a href="menu.html" class="menu-button">⬅ Volver al menú</a>
+
+  <script>
+    function toggleEnvelope() {
+      const flap = document.querySelector('.envelope-flap');
+      const seal = document.querySelector('.wax-seal');
+      const letter = document.querySelector('.letter');
+      
+      if (flap && seal && letter) {
+        flap.classList.toggle('open');
+        seal.classList.toggle('open');
+        letter.classList.toggle('open');
+      }
+    }
+
+    function handleKeypress(event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleEnvelope();
+      }
+    }
+  </script>
+</body>
+</html>
